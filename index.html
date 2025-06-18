@@ -2,16 +2,14 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calculateur de crédit immobilier</title>
   <style>
     body {
       font-family: sans-serif;
-      max-width: 600px;
+      max-width: 800px;
       margin: 40px auto;
       padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
       background: #f9f9f9;
     }
     h1 {
@@ -42,6 +40,23 @@
       background-color: #e9ecef;
       border-radius: 5px;
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: right;
+    }
+    th {
+      background-color: #f1f1f1;
+    }
+    td:first-child, th:first-child {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -59,25 +74,61 @@
   <button onclick="calculer()">Calculer</button>
 
   <div id="resultats"></div>
+  <div id="tableau"></div>
 
   <script>
     function calculer() {
       const montant = parseFloat(document.getElementById('montant').value);
-      const taux = parseFloat(document.getElementById('taux').value) / 100 / 12;
-      const duree = parseInt(document.getElementById('duree').value) * 12;
+      const tauxAnnuel = parseFloat(document.getElementById('taux').value);
+      const duree = parseInt(document.getElementById('duree').value);
 
-      if (!montant || !taux || !duree) {
+      if (!montant || !tauxAnnuel || !duree) {
         alert('Veuillez remplir tous les champs correctement.');
         return;
       }
 
-      const mensualite = montant * taux / (1 - Math.pow(1 + taux, -duree));
-      const coutTotal = mensualite * duree - montant;
+      const tauxMensuel = tauxAnnuel / 100 / 12;
+      const nbMensualites = duree * 12;
+      const mensualite = montant * tauxMensuel / (1 - Math.pow(1 + tauxMensuel, -nbMensualites));
+      const coutTotal = mensualite * nbMensualites - montant;
 
       document.getElementById('resultats').innerHTML = `
         <p>📌 <strong>Mensualité :</strong> ${mensualite.toFixed(2)} €</p>
         <p>💸 <strong>Coût total du crédit :</strong> ${coutTotal.toFixed(2)} €</p>
       `;
+
+      // Génération du tableau d’amortissement
+      let capitalRestant = montant;
+      let tableau = `
+        <table>
+          <thead>
+            <tr>
+              <th>Mois</th>
+              <th>Intérêts (€)</th>
+              <th>Capital remboursé (€)</th>
+              <th>Capital restant dû (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (let i = 1; i <= nbMensualites; i++) {
+        const interets = capitalRestant * tauxMensuel;
+        const capitalRembourse = mensualite - interets;
+        capitalRestant -= capitalRembourse;
+
+        tableau += `
+          <tr>
+            <td>${i}</td>
+            <td>${interets.toFixed(2)}</td>
+            <td>${capitalRembourse.toFixed(2)}</td>
+            <td>${Math.max(capitalRestant, 0).toFixed(2)}</td>
+          </tr>
+        `;
+      }
+
+      tableau += `</tbody></table>`;
+      document.getElementById('tableau').innerHTML = tableau;
     }
   </script>
 </body>
