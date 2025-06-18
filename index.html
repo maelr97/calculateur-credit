@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculateur de crédit immobilier</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    #resultats {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculateur de crédit immobilier</h1>
+
+  <label for="montant">Montant emprunté (€) :</label>
+  <input type="number" id="montant" placeholder="Ex. : 200000">
+
+  <label for="taux">Taux annuel (%) :</label>
+  <input type="number" step="0.01" id="taux" placeholder="Ex. : 2.5">
+
+  <label for="duree">Durée (années) :</label>
+  <input type="number" id="duree" placeholder="Ex. : 20">
+
+  <button onclick="calculer()">Calculer</button>
+
+  <div id="resultats"></div>
+
+  <script>
+    function calculer() {
+      const montant = parseFloat(document.getElementById('montant').value);
+      const taux = parseFloat(document.getElementById('taux').value) / 100 / 12;
+      const duree = parseInt(document.getElementById('duree').value) * 12;
+
+      if (!montant || !taux || !duree) {
+        alert('Veuillez remplir tous les champs correctement.');
+        return;
+      }
+
+      const mensualite = montant * taux / (1 - Math.pow(1 + taux, -duree));
+      const coutTotal = mensualite * duree - montant;
+
+      document.getElementById('resultats').innerHTML = `
+        <p>📌 <strong>Mensualité :</strong> ${mensualite.toFixed(2)} €</p>
+        <p>💸 <strong>Coût total du crédit :</strong> ${coutTotal.toFixed(2)} €</p>
+      `;
+    }
+  </script>
+</body>
+</html>
