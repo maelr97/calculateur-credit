@@ -8,6 +8,140 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<script>
+  let chartInstance = null;
+
+  function calculer() {
+    const prix = parseFloat(document.getElementById('prix').value);
+    const apport = parseFloat(document.getElementById('apport').value);
+    const tauxAnnuel = parseFloat(document.getElementById('taux').value);
+    const assuranceAnnuel = parseFloat(document.getElementById('assurance').value);
+    const duree = parseInt(document.getElementById('duree').value);
+
+    if (!prix || isNaN(apport) || !tauxAnnuel || isNaN(assuranceAnnuel) || !duree) {
+      alert('Veuillez remplir tous les champs correctement.');
+      return;
+    }
+
+    const montantEmprunte = prix - apport;
+    const tauxMensuel = tauxAnnuel / 100 / 12;
+    const tauxAssuranceMensuel = assuranceAnnuel / 100 / 12;
+    const nbMensualites = duree * 12;
+
+    const mensualiteCredit = montantEmprunte * tauxMensuel / (1 - Math.pow(1 + tauxMensuel, -nbMensualites));
+    const mensualiteAssurance = montantEmprunte * tauxAssuranceMensuel;
+    const mensualiteTotale = mensualiteCredit + mensualiteAssurance;
+
+    const coutCredit = mensualiteCredit * nbMensualites - montantEmprunte;
+    const coutAssurance = mensualiteAssurance * nbMensualites;
+    const coutTotal = coutCredit + coutAssurance;
+
+    document.getElementById('resultats').innerHTML = `
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Résultats</h5>
+          <p><strong>Montant emprunté :</strong> ${montantEmprunte.toFixed(2)} €</p>
+          <p><strong>Mensualité crédit :</strong> ${mensualiteCredit.toFixed(2)} €</p>
+          <p><strong>Mensualité assurance :</strong> ${mensualiteAssurance.toFixed(2)} €</p>
+          <p><strong>Mensualité totale :</strong> ${mensualiteTotale.toFixed(2)} €</p>
+          <p><strong>Coût total du crédit + assurance :</strong> ${coutTotal.toFixed(2)} €</p>
+        </div>
+      </div>
+    `;
+
+    let capitalRestant = montantEmprunte;
+    let cumulInterets = 0;
+    let cumulCapital = 0;
+
+    const labels = [];
+    const capitalRestantData = [];
+    const interetsData = [];
+    const capitalRembourseData = [];
+
+    let tableau = `
+      <div class="table-responsive">
+      <table class="table table-bordered table-sm mt-3">
+        <thead class="table-light">
+          <tr>
+            <th>Mois</th>
+            <th>Intérêts (€)</th>
+            <th>Capital remboursé (€)</th>
+            <th>Capital restant dû (€)</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    for (let i = 1; i <= nbMensualites; i++) {
+      const interets = capitalRestant * tauxMensuel;
+      const capitalRembourse = mensualiteCredit - interets;
+      capitalRestant -= capitalRembourse;
+
+      cumulInterets += interets;
+      cumulCapital += capitalRembourse;
+
+      labels.push(i);
+      capitalRestantData.push(Math.max(capitalRestant, 0));
+      interetsData.push(cumulInterets);
+      capitalRembourseData.push(cumulCapital);
+
+      tableau += `
+        <tr>
+          <td>${i}</td>
+          <td>${interets.toFixed(2)}</td>
+          <td>${capitalRembourse.toFixed(2)}</td>
+          <td>${Math.max(capitalRestant, 0).toFixed(2)}</td>
+        </tr>
+      `;
+    }
+
+    tableau += `</tbody></table></div>`;
+    document.getElementById('tableau').innerHTML = tableau;
+
+    if (chartInstance) chartInstance.destroy();
+    const ctx = document.getElementById('amortissementChart').getContext('2d');
+    chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Capital restant dû',
+            data: capitalRestantData,
+            borderColor: 'black',
+            fill: false
+          },
+          {
+            label: 'Capital remboursé (cumulé)',
+            data: capitalRembourseData,
+            borderColor: 'green',
+            backgroundColor: 'rgba(0,128,0,0.2)',
+            fill: true
+          },
+          {
+            label: 'Intérêts payés (cumulés)',
+            data: interetsData,
+            borderColor: 'orange',
+            backgroundColor: 'rgba(255,165,0,0.3)',
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            title: { display: true, text: 'Montant (€)' },
+            beginAtZero: true
+          },
+          x: {
+            title: { display: true, text: 'Durée (mois)' }
+          }
+        }
+      }
+    });
+  }
+</script>
 <body>
 
   <!-- NAVBAR -->
