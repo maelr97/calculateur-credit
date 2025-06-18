@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calculateur de crédit immobilier</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: sans-serif;
-      max-width: 800px;
+      max-width: 900px;
       margin: 40px auto;
       padding: 20px;
       background: #f9f9f9;
@@ -34,10 +35,10 @@
       border-radius: 5px;
       font-size: 16px;
     }
-    #resultats {
+    #resultats, #tableau {
       margin-top: 20px;
-      padding: 10px;
       background-color: #e9ecef;
+      padding: 10px;
       border-radius: 5px;
     }
     table {
@@ -56,6 +57,9 @@
     }
     td:first-child, th:first-child {
       text-align: center;
+    }
+    #chart-container {
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -76,7 +80,13 @@
   <div id="resultats"></div>
   <div id="tableau"></div>
 
+  <div id="chart-container">
+    <canvas id="amortissementChart" height="100"></canvas>
+  </div>
+
   <script>
+    let chartInstance = null;
+
     function calculer() {
       const montant = parseFloat(document.getElementById('montant').value);
       const tauxAnnuel = parseFloat(document.getElementById('taux').value);
@@ -97,8 +107,16 @@
         <p>💸 <strong>Coût total du crédit :</strong> ${coutTotal.toFixed(2)} €</p>
       `;
 
-      // Génération du tableau d’amortissement
+      // Données pour tableau et graphique
       let capitalRestant = montant;
+      let cumulInterets = 0;
+      let cumulCapital = 0;
+
+      const labels = [];
+      const capitalRestantData = [];
+      const interetsData = [];
+      const capitalRembourseData = [];
+
       let tableau = `
         <table>
           <thead>
@@ -117,6 +135,14 @@
         const capitalRembourse = mensualite - interets;
         capitalRestant -= capitalRembourse;
 
+        cumulInterets += interets;
+        cumulCapital += capitalRembourse;
+
+        labels.push(i);
+        capitalRestantData.push(Math.max(capitalRestant, 0));
+        interetsData.push(cumulInterets);
+        capitalRembourseData.push(cumulCapital);
+
         tableau += `
           <tr>
             <td>${i}</td>
@@ -129,6 +155,50 @@
 
       tableau += `</tbody></table>`;
       document.getElementById('tableau').innerHTML = tableau;
+
+      // Dessiner le graphique
+      if (chartInstance) chartInstance.destroy();
+      const ctx = document.getElementById('amortissementChart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Capital restant dû',
+              data: capitalRestantData,
+              borderColor: 'black',
+              fill: false
+            },
+            {
+              label: 'Capital remboursé (cumulé)',
+              data: capitalRembourseData,
+              borderColor: 'green',
+              backgroundColor: 'rgba(0,128,0,0.2)',
+              fill: true
+            },
+            {
+              label: 'Intérêts payés (cumulés)',
+              data: interetsData,
+              borderColor: 'orange',
+              backgroundColor: 'rgba(255,165,0,0.3)',
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              title: { display: true, text: 'Montant (€)' },
+              beginAtZero: true
+            },
+            x: {
+              title: { display: true, text: 'Durée (mois)' }
+            }
+          }
+        }
+      });
     }
   </script>
 </body>
