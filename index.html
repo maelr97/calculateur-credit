@@ -3,222 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calculateur de crédit immobilier</title>
+  <title>Simulateur Crédit Immo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #f9f9f9;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    #resultats, #tableau {
-      margin-top: 20px;
-      background-color: #e9ecef;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      font-size: 14px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 6px;
-      text-align: right;
-    }
-    th {
-      background-color: #f1f1f1;
-    }
-    td:first-child, th:first-child {
-      text-align: center;
-    }
-    #chart-container {
-      margin-top: 30px;
-    }
-  </style>
 </head>
 <body>
-  <h1>Calculateur de crédit immobilier</h1>
 
-  <label for="prix">Prix du bien immobilier (€) :</label>
-  <input type="number" id="prix" placeholder="Ex. : 250000">
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="#">CréditImmo</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Simulateur</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Investir</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">À propos</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-  <label for="apport">Apport personnel (€) :</label>
-  <input type="number" id="apport" placeholder="Ex. : 30000">
+  <!-- CONTENU PRINCIPAL -->
+  <main class="container py-5">
+    <h1 class="text-center mb-4">Simulateur de crédit immobilier</h1>
 
-  <label for="taux">Taux annuel du prêt (%) :</label>
-  <input type="number" step="0.01" id="taux" placeholder="Ex. : 2.5">
+    <!-- Ici on mettra le simulateur complet dans l'étape 2 -->
 
-  <label for="assurance">Taux assurance annuelle (%) :</label>
-  <input type="number" step="0.01" id="assurance" placeholder="Ex. : 0.36">
+  </main>
 
-  <label for="duree">Durée du prêt (années) :</label>
-  <input type="number" id="duree" placeholder="Ex. : 20">
+  <!-- FOOTER -->
+  <footer class="bg-light text-center py-4 mt-5 border-top">
+    <div class="container">
+      <p class="mb-0">© 2025 CréditImmo. Tous droits réservés.</p>
+    </div>
+  </footer>
 
-  <button onclick="calculer()">Calculer</button>
-
-  <div id="resultats"></div>
-  <div id="tableau"></div>
-
-  <div id="chart-container">
-    <canvas id="amortissementChart" height="100"></canvas>
-  </div>
-
-  <script>
-    let chartInstance = null;
-
-    function calculer() {
-      const prix = parseFloat(document.getElementById('prix').value);
-      const apport = parseFloat(document.getElementById('apport').value);
-      const tauxAnnuel = parseFloat(document.getElementById('taux').value);
-      const assuranceAnnuel = parseFloat(document.getElementById('assurance').value);
-      const duree = parseInt(document.getElementById('duree').value);
-
-      if (!prix || isNaN(apport) || !tauxAnnuel || isNaN(assuranceAnnuel) || !duree) {
-        alert('Veuillez remplir tous les champs correctement.');
-        return;
-      }
-
-      const montantEmprunte = prix - apport;
-      const tauxMensuel = tauxAnnuel / 100 / 12;
-      const tauxAssuranceMensuel = assuranceAnnuel / 100 / 12;
-      const nbMensualites = duree * 12;
-
-      const mensualiteCredit = montantEmprunte * tauxMensuel / (1 - Math.pow(1 + tauxMensuel, -nbMensualites));
-      const mensualiteAssurance = montantEmprunte * tauxAssuranceMensuel;
-      const mensualiteTotale = mensualiteCredit + mensualiteAssurance;
-
-      const coutCredit = mensualiteCredit * nbMensualites - montantEmprunte;
-      const coutAssurance = mensualiteAssurance * nbMensualites;
-      const coutTotal = coutCredit + coutAssurance;
-
-      document.getElementById('resultats').innerHTML = `
-        <p>📌 <strong>Montant emprunté :</strong> ${montantEmprunte.toFixed(2)} €</p>
-        <p>💸 <strong>Mensualité crédit :</strong> ${mensualiteCredit.toFixed(2)} €</p>
-        <p>🛡️ <strong>Mensualité assurance :</strong> ${mensualiteAssurance.toFixed(2)} €</p>
-        <p>💰 <strong>Mensualité totale :</strong> ${mensualiteTotale.toFixed(2)} €</p>
-        <p>📈 <strong>Coût total crédit + assurance :</strong> ${coutTotal.toFixed(2)} €</p>
-      `;
-
-      // Amortissement
-      let capitalRestant = montantEmprunte;
-      let cumulInterets = 0;
-      let cumulCapital = 0;
-
-      const labels = [];
-      const capitalRestantData = [];
-      const interetsData = [];
-      const capitalRembourseData = [];
-
-      let tableau = `
-        <table>
-          <thead>
-            <tr>
-              <th>Mois</th>
-              <th>Intérêts (€)</th>
-              <th>Capital remboursé (€)</th>
-              <th>Capital restant dû (€)</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      for (let i = 1; i <= nbMensualites; i++) {
-        const interets = capitalRestant * tauxMensuel;
-        const capitalRembourse = mensualiteCredit - interets;
-        capitalRestant -= capitalRembourse;
-
-        cumulInterets += interets;
-        cumulCapital += capitalRembourse;
-
-        labels.push(i);
-        capitalRestantData.push(Math.max(capitalRestant, 0));
-        interetsData.push(cumulInterets);
-        capitalRembourseData.push(cumulCapital);
-
-        tableau += `
-          <tr>
-            <td>${i}</td>
-            <td>${interets.toFixed(2)}</td>
-            <td>${capitalRembourse.toFixed(2)}</td>
-            <td>${Math.max(capitalRestant, 0).toFixed(2)}</td>
-          </tr>
-        `;
-      }
-
-      tableau += `</tbody></table>`;
-      document.getElementById('tableau').innerHTML = tableau;
-
-      // Graphique
-      if (chartInstance) chartInstance.destroy();
-      const ctx = document.getElementById('amortissementChart').getContext('2d');
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Capital restant dû',
-              data: capitalRestantData,
-              borderColor: 'black',
-              fill: false
-            },
-            {
-              label: 'Capital remboursé (cumulé)',
-              data: capitalRembourseData,
-              borderColor: 'green',
-              backgroundColor: 'rgba(0,128,0,0.2)',
-              fill: true
-            },
-            {
-              label: 'Intérêts payés (cumulés)',
-              data: interetsData,
-              borderColor: 'orange',
-              backgroundColor: 'rgba(255,165,0,0.3)',
-              fill: true
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              title: { display: true, text: 'Montant (€)' },
-              beginAtZero: true
-            },
-            x: {
-              title: { display: true, text: 'Durée (mois)' }
-            }
-          }
-        }
-      });
-    }
-  </script>
 </body>
 </html>
