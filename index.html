@@ -66,13 +66,19 @@
 <body>
   <h1>Calculateur de crédit immobilier</h1>
 
-  <label for="montant">Montant emprunté (€) :</label>
-  <input type="number" id="montant" placeholder="Ex. : 200000">
+  <label for="prix">Prix du bien immobilier (€) :</label>
+  <input type="number" id="prix" placeholder="Ex. : 250000">
 
-  <label for="taux">Taux annuel (%) :</label>
+  <label for="apport">Apport personnel (€) :</label>
+  <input type="number" id="apport" placeholder="Ex. : 30000">
+
+  <label for="taux">Taux annuel du prêt (%) :</label>
   <input type="number" step="0.01" id="taux" placeholder="Ex. : 2.5">
 
-  <label for="duree">Durée (années) :</label>
+  <label for="assurance">Taux assurance annuelle (%) :</label>
+  <input type="number" step="0.01" id="assurance" placeholder="Ex. : 0.36">
+
+  <label for="duree">Durée du prêt (années) :</label>
   <input type="number" id="duree" placeholder="Ex. : 20">
 
   <button onclick="calculer()">Calculer</button>
@@ -88,27 +94,40 @@
     let chartInstance = null;
 
     function calculer() {
-      const montant = parseFloat(document.getElementById('montant').value);
+      const prix = parseFloat(document.getElementById('prix').value);
+      const apport = parseFloat(document.getElementById('apport').value);
       const tauxAnnuel = parseFloat(document.getElementById('taux').value);
+      const assuranceAnnuel = parseFloat(document.getElementById('assurance').value);
       const duree = parseInt(document.getElementById('duree').value);
 
-      if (!montant || !tauxAnnuel || !duree) {
+      if (!prix || isNaN(apport) || !tauxAnnuel || isNaN(assuranceAnnuel) || !duree) {
         alert('Veuillez remplir tous les champs correctement.');
         return;
       }
 
+      const montantEmprunte = prix - apport;
       const tauxMensuel = tauxAnnuel / 100 / 12;
+      const tauxAssuranceMensuel = assuranceAnnuel / 100 / 12;
       const nbMensualites = duree * 12;
-      const mensualite = montant * tauxMensuel / (1 - Math.pow(1 + tauxMensuel, -nbMensualites));
-      const coutTotal = mensualite * nbMensualites - montant;
+
+      const mensualiteCredit = montantEmprunte * tauxMensuel / (1 - Math.pow(1 + tauxMensuel, -nbMensualites));
+      const mensualiteAssurance = montantEmprunte * tauxAssuranceMensuel;
+      const mensualiteTotale = mensualiteCredit + mensualiteAssurance;
+
+      const coutCredit = mensualiteCredit * nbMensualites - montantEmprunte;
+      const coutAssurance = mensualiteAssurance * nbMensualites;
+      const coutTotal = coutCredit + coutAssurance;
 
       document.getElementById('resultats').innerHTML = `
-        <p>📌 <strong>Mensualité :</strong> ${mensualite.toFixed(2)} €</p>
-        <p>💸 <strong>Coût total du crédit :</strong> ${coutTotal.toFixed(2)} €</p>
+        <p>📌 <strong>Montant emprunté :</strong> ${montantEmprunte.toFixed(2)} €</p>
+        <p>💸 <strong>Mensualité crédit :</strong> ${mensualiteCredit.toFixed(2)} €</p>
+        <p>🛡️ <strong>Mensualité assurance :</strong> ${mensualiteAssurance.toFixed(2)} €</p>
+        <p>💰 <strong>Mensualité totale :</strong> ${mensualiteTotale.toFixed(2)} €</p>
+        <p>📈 <strong>Coût total crédit + assurance :</strong> ${coutTotal.toFixed(2)} €</p>
       `;
 
-      // Données pour tableau et graphique
-      let capitalRestant = montant;
+      // Amortissement
+      let capitalRestant = montantEmprunte;
       let cumulInterets = 0;
       let cumulCapital = 0;
 
@@ -132,7 +151,7 @@
 
       for (let i = 1; i <= nbMensualites; i++) {
         const interets = capitalRestant * tauxMensuel;
-        const capitalRembourse = mensualite - interets;
+        const capitalRembourse = mensualiteCredit - interets;
         capitalRestant -= capitalRembourse;
 
         cumulInterets += interets;
@@ -156,7 +175,7 @@
       tableau += `</tbody></table>`;
       document.getElementById('tableau').innerHTML = tableau;
 
-      // Dessiner le graphique
+      // Graphique
       if (chartInstance) chartInstance.destroy();
       const ctx = document.getElementById('amortissementChart').getContext('2d');
       chartInstance = new Chart(ctx, {
