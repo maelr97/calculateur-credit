@@ -31,7 +31,43 @@
   <main class="container py-5">
     <h1 class="text-center mb-4">Simulateur de crédit immobilier</h1>
 
-    <!-- Ici on mettra le simulateur complet dans l'étape 2 -->
+    <form id="form-simulation">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="prix" class="form-label">Prix du bien immobilier (€)</label>
+      <input type="number" class="form-control" id="prix" placeholder="Ex. : 250000">
+    </div>
+    <div class="col-md-6">
+      <label for="apport" class="form-label">Apport personnel (€)</label>
+      <input type="number" class="form-control" id="apport" placeholder="Ex. : 30000">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="taux" class="form-label">Taux annuel du prêt (%)</label>
+      <input type="number" step="0.01" class="form-control" id="taux" placeholder="Ex. : 2.5">
+    </div>
+    <div class="col-md-4">
+      <label for="assurance" class="form-label">Taux assurance annuelle (%)</label>
+      <input type="number" step="0.01" class="form-control" id="assurance" placeholder="Ex. : 0.36">
+    </div>
+    <div class="col-md-4">
+      <label for="duree" class="form-label">Durée du prêt (années)</label>
+      <input type="number" class="form-control" id="duree" placeholder="Ex. : 20">
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-primary w-100" onclick="calculer()">Calculer</button>
+</form>
+
+<div id="resultats" class="mt-4"></div>
+<div id="tableau" class="mt-4"></div>
+
+<div class="mt-5">
+  <canvas id="amortissementChart" height="100"></canvas>
+</div>
+
 
   </main>
 
