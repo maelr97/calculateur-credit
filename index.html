@@ -118,7 +118,26 @@
     </div>
   </footer>
 
+  <!-- Bandeau cookies RGPD -->
+  <div id="cookie-banner" class="position-fixed bottom-0 w-100 bg-dark text-white text-center p-3" style="display:none; z-index:1050;">
+    <p class="mb-2">Ce site utilise des cookies à des fins de fonctionnement uniquement. En poursuivant, vous acceptez notre politique de confidentialité.</p>
+    <button class="btn btn-light btn-sm" onclick="acceptCookies()">J'accepte</button>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function acceptCookies() {
+      localStorage.setItem('cookiesAccepted', 'true');
+      document.getElementById('cookie-banner').style.display = 'none';
+    }
+
+    window.onload = function () {
+      if (!localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'block';
+      }
+    }
+  </script>
+
   <script>
     let chartInstance = null;
 
