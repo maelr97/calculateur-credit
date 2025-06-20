@@ -18,7 +18,20 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-      <a class="navbar-brand" href="#">CréditImmo</a>
+      <a class="navbar-brand" href="index.html">CréditImmo</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Simulateur</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="bourse.html">Investir en Bourse</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 
@@ -117,7 +130,6 @@
       const coutAssurance = mensualiteAssurance * nbMensualites;
       const coutTotal = coutCredit + coutAssurance;
 
-      // Affiche le bouton "Afficher le détail"
       document.getElementById('btn-detail').style.display = 'inline-block';
 
       document.getElementById('montant-emprunte').textContent = montantEmprunte.toFixed(0);
