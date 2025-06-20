@@ -1,37 +1,20 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CréditImmo – Simulateur</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3145/3145765.png">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CréditImmo – Accueil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3145/3145765.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8f9fa;
-    }
-    #tableau-container.collapsed {
-      display: none;
-    }
-    #btn-detail {
-      display: none;
-    }
-    footer a {
-      text-decoration: none;
-      color: inherit;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    .footer-links a {
-      margin: 0 10px;
-    }
+    body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; }
+    .footer-links a { margin: 0 10px; text-decoration: none; color: inherit; }
+    .footer-links a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
       <a class="navbar-brand" href="index.html">CréditImmo</a>
@@ -40,77 +23,19 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link active" href="index.html">Simulateur</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="bourse.html">Investir en Bourse</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="ptz.html">Prêt à Taux Zéro</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="faq.html">FAQ</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="simulateur.html">Simulateur</a></li>
+          <li class="nav-item"><a class="nav-link" href="bourse.html">Investir en Bourse</a></li>
+          <li class="nav-item"><a class="nav-link" href="ptz.html">Prêt à Taux Zéro</a></li>
+          <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <main class="container py-5">
-    <div class="row">
-      <!-- Colonne gauche : Entrée des données -->
-      <div class="col-md-6">
-        <form id="form-simulation">
-          <div class="mb-3">
-            <label for="prix" class="form-label">Prix du bien immobilier (€)</label>
-            <input type="number" class="form-control" id="prix" placeholder="Ex. : 250000">
-          </div>
-          <div class="mb-3">
-            <label for="apport" class="form-label">Apport personnel (€)</label>
-            <input type="number" class="form-control" id="apport" placeholder="Ex. : 30000">
-          </div>
-          <div class="mb-3">
-            <label for="taux" class="form-label">Taux d'intérêt annuel (%)</label>
-            <input type="number" step="0.01" class="form-control" id="taux" placeholder="Ex. : 2.5">
-          </div>
-          <div class="mb-3">
-            <label for="assurance" class="form-label">Taux assurance annuelle (%)</label>
-            <input type="number" step="0.01" class="form-control" id="assurance" placeholder="Ex. : 0.36">
-          </div>
-          <div class="mb-3">
-            <label for="duree" class="form-label">Durée du prêt (années)</label>
-            <input type="number" class="form-control" id="duree" placeholder="Ex. : 20">
-          </div>
-          <button type="button" class="btn btn-primary w-100" onclick="calculer()">Calculer</button>
-        </form>
-      </div>
-
-      <!-- Colonne droite : Résultats principaux -->
-      <div class="col-md-6">
-        <div class="card text-center p-4 shadow-sm">
-          <h5 class="mb-3">Votre mensualité sera de</h5>
-          <h1 class="display-4 text-warning" id="mensualite-resultat">-- €</h1>
-          <hr>
-          <p><strong>Montant de votre prêt :</strong> <span id="montant-emprunte">--</span>€</p>
-          <p><strong>Votre mensualité :</strong> <span id="mensualite-credit">--</span>€/mois<br><small>dont assurance : <span id="mensualite-assurance">--</span>€</small></p>
-          <p><strong>Coût total du crédit :</strong> <span id="cout-total">--</span>€<br><small>dont assurance : <span id="cout-assurance">--</span>€</small></p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Graphique -->
-    <div class="mt-5">
-      <canvas id="amortissementChart" height="100"></canvas>
-    </div>
-
-    <!-- Tableau d'amortissement caché -->
-    <div class="text-center mt-4">
-      <button id="btn-detail" class="btn btn-outline-secondary" onclick="toggleTableau()">Afficher le détail</button>
-    </div>
-    <div id="tableau-container" class="mt-3 collapsed">
-      <div id="tableau"></div>
-    </div>
+  <main class="container text-center py-5">
+    <h1 class="mb-4">Bienvenue sur CréditImmo</h1>
+    <p class="lead mb-4">Votre outil simple pour simuler un crédit immobilier, comprendre les aides, et apprendre à investir.</p>
+    <a href="simulateur.html" class="btn btn-primary btn-lg">🔍 Lancer une simulation</a>
   </main>
 
   <footer class="bg-light text-center py-4 mt-5 border-top">
@@ -124,133 +49,6 @@
     </div>
   </footer>
 
-  <!-- Bandeau cookies RGPD -->
-  <div id="cookie-banner" class="position-fixed bottom-0 w-100 bg-dark text-white text-center p-3" style="display:none; z-index:1050;">
-    <p class="mb-2">Ce site utilise des cookies à des fins de fonctionnement uniquement. En poursuivant, vous acceptez notre politique de confidentialité.</p>
-    <button class="btn btn-light btn-sm" onclick="acceptCookies()">J'accepte</button>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    function acceptCookies() {
-      localStorage.setItem('cookiesAccepted', 'true');
-      document.getElementById('cookie-banner').style.display = 'none';
-    }
-
-    window.onload = function () {
-      if (!localStorage.getItem('cookiesAccepted')) {
-        document.getElementById('cookie-banner').style.display = 'block';
-      }
-    }
-  </script>
-
-  <script>
-    let chartInstance = null;
-
-    function toggleTableau() {
-      const container = document.getElementById('tableau-container');
-      container.classList.toggle('collapsed');
-    }
-
-    function calculer() {
-      const prix = parseFloat(document.getElementById('prix').value);
-      const apport = parseFloat(document.getElementById('apport').value);
-      const tauxAnnuel = parseFloat(document.getElementById('taux').value);
-      const assuranceAnnuel = parseFloat(document.getElementById('assurance').value);
-      const duree = parseInt(document.getElementById('duree').value);
-
-      if (!prix || isNaN(apport) || !tauxAnnuel || isNaN(assuranceAnnuel) || !duree) {
-        alert('Veuillez remplir tous les champs correctement.');
-        return;
-      }
-
-      const montantEmprunte = prix - apport;
-      const tauxMensuel = tauxAnnuel / 100 / 12;
-      const tauxAssuranceMensuel = assuranceAnnuel / 100 / 12;
-      const nbMensualites = duree * 12;
-
-      const mensualiteCredit = montantEmprunte * tauxMensuel / (1 - Math.pow(1 + tauxMensuel, -nbMensualites));
-      const mensualiteAssurance = montantEmprunte * tauxAssuranceMensuel;
-      const mensualiteTotale = mensualiteCredit + mensualiteAssurance;
-
-      const coutCredit = mensualiteCredit * nbMensualites - montantEmprunte;
-      const coutAssurance = mensualiteAssurance * nbMensualites;
-      const coutTotal = coutCredit + coutAssurance;
-
-      document.getElementById('btn-detail').style.display = 'inline-block';
-
-      document.getElementById('montant-emprunte').textContent = montantEmprunte.toFixed(0);
-      document.getElementById('mensualite-credit').textContent = mensualiteCredit.toFixed(0);
-      document.getElementById('mensualite-assurance').textContent = mensualiteAssurance.toFixed(0);
-      document.getElementById('mensualite-resultat').textContent = mensualiteTotale.toFixed(0) + '€';
-      document.getElementById('cout-total').textContent = coutTotal.toFixed(0);
-      document.getElementById('cout-assurance').textContent = coutAssurance.toFixed(0);
-
-      let capitalRestant = montantEmprunte;
-      let cumulInterets = 0;
-      let cumulCapital = 0;
-
-      const labels = [], capitalRestantData = [], interetsData = [], capitalRembourseData = [];
-      let tableau = `<div class="table-responsive"><table class="table table-bordered table-sm mt-3">
-        <thead class="table-light"><tr><th>Mois</th><th>Intérêts</th><th>Capital</th><th>Restant</th></tr></thead><tbody>`;
-
-      for (let i = 1; i <= nbMensualites; i++) {
-        const interets = capitalRestant * tauxMensuel;
-        const capitalRembourse = mensualiteCredit - interets;
-        capitalRestant -= capitalRembourse;
-
-        cumulInterets += interets;
-        cumulCapital += capitalRembourse;
-
-        labels.push(i);
-        capitalRestantData.push(Math.max(capitalRestant, 0));
-        interetsData.push(cumulInterets);
-        capitalRembourseData.push(cumulCapital);
-
-        tableau += `<tr><td>${i}</td><td>${interets.toFixed(2)}</td><td>${capitalRembourse.toFixed(2)}</td><td>${Math.max(capitalRestant, 0).toFixed(2)}</td></tr>`;
-      }
-
-      tableau += `</tbody></table></div>`;
-      document.getElementById('tableau').innerHTML = tableau;
-
-      if (chartInstance) chartInstance.destroy();
-      const ctx = document.getElementById('amortissementChart').getContext('2d');
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Capital restant dû',
-              data: capitalRestantData,
-              borderColor: 'black',
-              fill: false
-            },
-            {
-              label: 'Capital remboursé (cumulé)',
-              data: capitalRembourseData,
-              borderColor: 'green',
-              backgroundColor: 'rgba(0,128,0,0.2)',
-              fill: true
-            },
-            {
-              label: 'Intérêts payés (cumulés)',
-              data: interetsData,
-              borderColor: 'orange',
-              backgroundColor: 'rgba(255,165,0,0.3)',
-              fill: true
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: { beginAtZero: true, title: { display: true, text: 'Montant (€)' } },
-            x: { title: { display: true, text: 'Durée (mois)' } }
-          }
-        }
-      });
-    }
-  </script>
 </body>
 </html>
