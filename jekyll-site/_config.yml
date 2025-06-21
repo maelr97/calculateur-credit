@@ -1,0 +1,27 @@
+title: CréditImmo
+email: contact@creditimmo.fr
+description: >-
+  Simulation de crédit immobilier et informations sur le PTZ.
+baseurl: "" # Laisse vide pour GitHub Pages à la racine
+url: ""     # idem
+
+# Réseaux sociaux
+twitter_username: jekyllrb
+github_username:  jekyll
+
+# Thème désactivé car on utilise nos layouts
+theme: null
+
+# Plugins utilisés
+plugins:
+  - jekyll-feed
+
+# Inclure des fichiers HTML ou autres hors dossier _posts
+include:
+  - simulateur.md
+  - ptz.html
+  - faq.md
+  - mentions.md
+  - bourse.md
+  - 404.html
+  - index.md

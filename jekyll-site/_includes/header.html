@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="{{ site.baseurl }}/">CréditImmo</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link {% if page.url == '/' %}active{% endif %}" href="{{ site.baseurl }}/">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link {% if page.url contains '/simulateur/' %}active{% endif %}" href="{{ site.baseurl }}/simulateur/">Simulateur</a></li>
+        <li class="nav-item"><a class="nav-link {% if page.url contains '/ptz' %}active{% endif %}" href="{{ site.baseurl }}/ptz">PTZ</a></li>
+        <li class="nav-item"><a class="nav-link {% if page.url contains '/bourse' %}active{% endif %}" href="{{ site.baseurl }}/bourse">Investir en Bourse</a></li>
+        <li class="nav-item"><a class="nav-link {% if page.url contains '/faq' %}active{% endif %}" href="{{ site.baseurl }}/faq">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
